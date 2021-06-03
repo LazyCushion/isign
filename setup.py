@@ -34,7 +34,7 @@ setup(
         'Intended Audience :: Developers',
         'Topic :: Utilities',
         'License :: OSI Approved :: Apache Software License',
-        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.8',
     ],
     keywords=['ios', 'app', 'signature', 'codesign', 'sign', 'resign'],
     packages=find_packages(),
@@ -42,7 +42,7 @@ setup(
         'biplist==1.0.3',
         'construct==2.5.2',
         'memoizer==0.0.1',
-        'pyOpenSSL==18.0.0'
+        'pyOpenSSL==20.0.1',
     ],
     package_data={
         package: ['apple_credentials/applecerts.pem',

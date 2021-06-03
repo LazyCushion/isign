@@ -47,7 +47,7 @@ class App(object):
         return self.path
 
     def provision(self, provision_path):
-        print "provision_path: {0}".format(provision_path)
+        print("provision_path: {0}".format(provision_path))
         shutil.copyfile(provision_path, self.provision_path)
 
     def create_entitlements(self):
@@ -148,52 +148,52 @@ def app_argument(path):
         app = ReceivedIpaApp(path)
     else:
         raise argparse.ArgumentTypeError(
-                "{0} doesn't seem to be an .app or .ipa".format(path))
+            "{0} doesn't seem to be an .app or .ipa".format(path))
     return app
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
-            description='Resign an iOS application with a new identity '
-                        'and provisioning profile.')
+        description='Resign an iOS application with a new identity '
+        'and provisioning profile.')
     parser.add_argument(
-            '-p', '--provisioning-profile',
-            dest='provisioning_profile',
-            required=True,
-            metavar='<your.mobileprovision>',
-            type=exists_absolute_path_argument,
-            help='Path to provisioning profile')
+        '-p', '--provisioning-profile',
+        dest='provisioning_profile',
+        required=True,
+        metavar='<your.mobileprovision>',
+        type=exists_absolute_path_argument,
+        help='Path to provisioning profile')
     parser.add_argument(
-            '-c', '--certificate',
-            dest='certificate',
-            required=True,
-            metavar='<certificate>',
-            help='Identifier for the certificate in your keychain. '
-                 'See `security find-identity` for a list, or '
-                 '`man codesign` for valid ways to specify it.')
+        '-c', '--certificate',
+        dest='certificate',
+        required=True,
+        metavar='<certificate>',
+        help='Identifier for the certificate in your keychain. '
+        'See `security find-identity` for a list, or '
+        '`man codesign` for valid ways to specify it.')
     parser.add_argument(
-            '-s', '--staging',
-            dest='stage_dir',
-            required=False,
-            metavar='<path>',
-            type=absolute_path_argument,
-            default=os.path.join(os.getcwd(), 'stage'),
-            help='Path to stage directory.')
+        '-s', '--staging',
+        dest='stage_dir',
+        required=False,
+        metavar='<path>',
+        type=absolute_path_argument,
+        default=os.path.join(os.getcwd(), 'stage'),
+        help='Path to stage directory.')
     parser.add_argument(
-            '-o', '--output',
-            dest='output_path',
-            required=False,
-            metavar='<path>',
-            type=absolute_path_argument,
-            default=os.path.join(os.getcwd(), 'out'),
-            help='Path to output file or directory')
+        '-o', '--output',
+        dest='output_path',
+        required=False,
+        metavar='<path>',
+        type=absolute_path_argument,
+        default=os.path.join(os.getcwd(), 'out'),
+        help='Path to output file or directory')
     parser.add_argument(
-            'app',
-            nargs=1,
-            metavar='<path>',
-            type=app_argument,
-            help='Path to application to re-sign, typically a '
-                 'directory ending in .app or file ending in .ipa.')
+        'app',
+        nargs=1,
+        metavar='<path>',
+        type=app_argument,
+        help='Path to application to re-sign, typically a '
+        'directory ending in .app or file ending in .ipa.')
     return parser.parse_args()
 
 
@@ -218,4 +218,4 @@ if __name__ == '__main__':
     if os.path.exists(args.stage_dir):
         shutil.rmtree(args.stage_dir)
 
-    print "Re-signed package: {0}".format(output_path)
+    print("Re-signed package: {0}".format(output_path))

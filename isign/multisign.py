@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from os.path import isdir
-import isign
-from archive import archive_factory
-from signer import Signer
+from . import isign
+from .archive import archive_factory
+from .signer import Signer
 import logging
 import multiprocessing
 

@@ -11,9 +11,9 @@ import construct
 import hashlib
 import logging
 import math
-import macho
-import macho_cs
-import utils
+from . import macho
+from . import macho_cs
+from . import utils
 
 
 log = logging.getLogger(__name__)

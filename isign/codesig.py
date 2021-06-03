@@ -3,9 +3,9 @@ from abc import ABCMeta
 import construct
 import hashlib
 import logging
-import macho_cs
+from . import macho_cs
 
-import utils
+from . import utils
 
 log = logging.getLogger(__name__)
 

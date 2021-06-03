@@ -11,17 +11,18 @@
     See the Apple Developer Documentation "About Bundles" """
 
 import biplist
-import code_resources
-from exceptions import NotMatched
+from . import code_resources
+from .exceptions import NotMatched
 import copy
 import glob
 import logging
 import os
 from os.path import basename, exists, join, splitext
-from signer import openssl_command
-import signable
+from .signer import openssl_command
+from . import signable
 import shutil
-import utils
+from . import utils
+import sys
 
 log = logging.getLogger(__name__)
 
@@ -48,7 +49,9 @@ class Bundle(object):
         self.info_path = join(self.path, 'Info.plist')
         if not exists(self.info_path):
             raise NotMatched("no Info.plist found; probably not a bundle")
+        
         self.info = biplist.readPlist(self.info_path)
+
         self.orig_info = None
         if not is_info_plist_native(self.info):
             # while we should probably not allow this *or* add it ourselves, it appears to work without it
@@ -94,7 +97,7 @@ class Bundle(object):
                     url_type['CFBundleURLName'] = new_bundle_id
                     changed = True
 
-        for key, val in new_props.iteritems():
+        for key, val in new_props.items():
             is_new_key = key not in self.info
             if is_new_key or self.info[key] != val:
                 if is_new_key:
@@ -158,6 +161,7 @@ class Bundle(object):
                 plist_path = join(appex_path, 'Info.plist')
                 if not exists(plist_path):
                     continue
+
                 plist = biplist.readPlist(plist_path)
                 appex_exec_path = join(appex_path, plist['CFBundleExecutable'])
                 appex = signable.Appex(self, appex_exec_path, signer)
@@ -222,9 +226,16 @@ class App(Bundle):
         ]
         # this command always prints 'Verification successful' to stderr.
         (profile_text, err) = openssl_command(cmd, data=None, expect_err=True)
-        if err and err.strip() != 'Verification successful':
+        if err and err.strip() != b'Verification successful':
             log.error('Received unexpected error from openssl: {}'.format(err))
-        plist_dict = biplist.readPlistFromString(profile_text)
+        
+        try:
+            plist_dict = biplist.readPlistFromString(profile_text)
+        except Exception as e:
+            print('biplist.readPlistFromString error', e)
+            import sys
+            sys.exit(1)
+            pass
         if 'Entitlements' not in plist_dict:
             log.debug('failed to get entitlements in provisioning profile')
             raise Exception('could not find Entitlements in {}'.format(provision_path))
